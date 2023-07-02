@@ -7,6 +7,7 @@ class Author(models.Model):
     author = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
 
+
     def update_rating(self):
         post_rating = self.post_set.all().aggregate(postRating=Sum('rating'))
         p_r = post_rating.get('postRating') * 3
