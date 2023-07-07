@@ -8,9 +8,39 @@ News
 {% block content %}
 <h1>Все новости</h1>
 <p>Всего постов: {{ posts | length}}</p>
+<div>
+    <a class="btn btn-outline-dark mt-auto" href="{% url 'search' %}">Поиск</a>
+    <a class="btn btn-outline-dark mt-auto" href="{% url 'post_add' %}">Создать пост</a>
+</div>
 {% for post in posts %}
+<br>
 <p>{{ post.date | date:'d M Y' }}</p>
 <h3>{{ post.title | censure:'***' }}</h3>
-<p>{{ post.text | truncatewords:20 | censure:'***' }}</p>
+<p>{{ post.text | truncatewords:20 | censure:'***' }} <a href="{% url 'post_detail' post.id %}">Читать</a></p>
+<hr>
 {% endfor %}
+
+{% if is_paginated %}
+    <p>
+
+    {% if page_obj.has_previous %}
+        <a href="?page=1">Начало</a>
+        <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <a>{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">>>></a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Конец</a>
+    {% endif %}
+    </p>
+{% endif %}
 {% endblock content %}

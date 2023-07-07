@@ -7,6 +7,9 @@ class Author(models.Model):
     author = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
 
+    def __str__(self):
+        return f'{self.author.username}'
+
 
     def update_rating(self):
         post_rating = self.post_set.all().aggregate(postRating=Sum('rating'))
@@ -23,6 +26,9 @@ class Author(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Post(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
@@ -32,6 +38,9 @@ class Post(models.Model):
     text = models.TextField()
     rating = models.IntegerField(default=0)
     category = models.ManyToManyField(Category, through='PostCategory')
+
+    def __str__(self):
+        return f'{self.title[:10]}'
 
     def like(self):
         self.rating += 1
@@ -44,6 +53,9 @@ class Post(models.Model):
     def preview(self):
         return self.text[:123] + '...'
 
+    def get_absolute_url(self):
+        return f'/news/{self.id}'
+
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -51,6 +63,9 @@ class Comment(models.Model):
     text = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.text[:10]}'
 
     def like(self):
         self.rating += 1

@@ -1,0 +1,18 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+
+{% block title %}
+Удаление поста
+{% endblock title %}
+
+{% block content %}
+<h2>Вы действительно хотите удалить данный пост?</h2>
+<h1>{{ post.title | censure:'***' }}</h1>
+<p>{{ post.date | date:'H:i, d M Y' }}</p>
+<p>{{ post.text | censure:'***' }}</p>
+<p>Автор: {{ post.author.author.username }}</p>
+<p>Рейтинг: {{ post.rating }}</p>
+<form method="POST">
+    {% csrf_token %}
+    <button class="btn btn-outline-dark mt-auto">Подтвердить</button>
+{% endblock content %}

@@ -1,0 +1,14 @@
+{% extends 'default.html' %}
+
+{% block title %}
+Редактирование поста
+{% endblock title %}
+
+{% block content %}
+<h3>Воспользуйтесь формой для редактирования поста</h3>
+<form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <button class="btn btn-outline-dark mt-auto">Сохранить</button>
+</form>
+{% endblock content %}
