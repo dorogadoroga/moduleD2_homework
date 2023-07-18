@@ -6,7 +6,6 @@
 {% endblock title %}
 
 {% block content %}
-<a href="{% url 'news' %}">На главную страницу</a>
 <h1>{{ post.title | censure:'***' }}</h1>
 <p>{{ post.date | date:'H:i, d M Y' }}</p>
 <p>{{ post.text | censure:'***' }}</p>

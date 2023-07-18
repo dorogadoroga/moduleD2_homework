@@ -2,12 +2,12 @@
 {% load custom_filters %}
 
 {% block title %}
-News
+News of economics
 {% endblock title %}
 
 {% block content %}
-<h1>Все новости</h1>
-<p>Всего постов: {{ posts | length}}</p>
+<h1>Новости туризма</h1>
+<p>Всего постов: {{ tourism_news | length}}</p>
 <div>
     {% if is_not_login %}
         <a class="btn btn-outline-dark mt-auto" href="accounts/login">Войти в учетную запись</a>
@@ -19,10 +19,9 @@ News
     {% endif %}
 </div>
 <div>
-    <a class="btn btn-outline-dark mt-auto" href="{% url 'search' %}">Поиск</a>
     <a class="btn btn-outline-dark mt-auto" href="{% url 'post_add' %}">Создать пост</a>
 </div>
-{% for post in posts %}
+{% for post in tourism_news %}
 <br>
 <p>{{ post.date | date:'d M Y' }}</p>
 <h3>{{ post.title | censure:'***' }}</h3>

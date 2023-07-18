@@ -5,6 +5,9 @@
 {% endblock title %}
 
 {% block content %}
+<div>
+  <a class="btn btn-outline-dark mt-auto" href="accounts/logout">Выйти из учетной записи</a>
+</div>
 <h3>Воспользуйтесь формой для редактирования поста</h3>
 <form method="POST">
     {% csrf_token %}

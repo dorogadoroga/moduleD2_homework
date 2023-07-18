@@ -10,3 +10,4 @@ class PostFilter(FilterSet):
             'title': ['icontains'],
             'author': ['exact']
         }
+
