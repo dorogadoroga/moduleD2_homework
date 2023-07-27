@@ -9,10 +9,7 @@ urlpatterns = [
     path('become-author', become_author, name='become_author'),
     path('<int:pk>/edit', PostUpdate.as_view(), name='post_edit'),
     path('<int:pk>/delete', PostDelete.as_view(), name='post_delete'),
-    path('economics', PostEconomics.as_view()),
-    path('politics', PostPolitics.as_view()),
-    path('technologies', PostTechnologies.as_view()),
-    path('sport', PostSport.as_view()),
-    path('tourism', PostTourism.as_view()),
-    path('opinions', PostOpinions.as_view()),
+    path('<slug:slug>', PostsByCategory.as_view(), name='categories'),
+    path('<slug:slug>/become_subscriber', become_subscriber, name='become_subscriber'),
+    path('<slug:slug>/delete_subscription', delete_subscription, name='delete_subscription')
 ]

@@ -2,17 +2,22 @@
 {% load custom_filters %}
 
 {% block title %}
-News of economics
+News of {{ category.slug }}
 {% endblock title %}
 
 {% block content %}
-<h1>Новости туризма</h1>
-<p>Всего постов: {{ tourism_news | length}}</p>
+<h1>{{ category.name }}</h1>
+<p>Всего постов: {{ news_by_categories | length}}</p>
 <div>
     {% if is_not_login %}
         <a class="btn btn-outline-dark mt-auto" href="accounts/login">Войти в учетную запись</a>
     {% else %}
         <a class="btn btn-outline-dark mt-auto" href="accounts/logout">Выйти из учетной записи</a>
+        {% if not subscribed %}
+            <a class="btn btn-outline-dark mt-auto" href="{% url 'become_subscriber' category.slug %}" >Подписаться на категорию</a>
+        {% else %}
+            <a class="btn btn-outline-dark mt-auto" href="{% url 'delete_subscription' category.slug %}" >Отменить подписку на категорию</a>
+        {% endif %}
         {% if is_not_author %}
             <a class="btn btn-outline-dark mt-auto" href="become-author">Стать автором</a>
         {% endif %}
@@ -21,7 +26,7 @@ News of economics
 <div>
     <a class="btn btn-outline-dark mt-auto" href="{% url 'post_add' %}">Создать пост</a>
 </div>
-{% for post in tourism_news %}
+{% for post in news_by_categories %}
 <br>
 <p>{{ post.date | date:'d M Y' }}</p>
 <h3>{{ post.title | censure:'***' }}</h3>

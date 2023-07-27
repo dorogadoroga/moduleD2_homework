@@ -25,10 +25,15 @@ class Author(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
+    subscribers = models.ManyToManyField(User, through='UserCategory', blank=True)
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, null=True)
 
 
     def __str__(self):
         return f'{self.name}'
+
+    def get_absolute_url(self):
+        return f'/{self.slug}'
 
 
 class Post(models.Model):
@@ -38,7 +43,7 @@ class Post(models.Model):
     title = models.CharField(max_length=255)
     text = models.TextField()
     rating = models.IntegerField(default=0)
-    category = models.ManyToManyField(Category, through='PostCategory')
+    category = models.ManyToManyField(Category, related_name='posts', through='PostCategory')
 
     def __str__(self):
         return f'{self.title[:10]}'
@@ -60,7 +65,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    author = models.ForeignKey(User, on_delete=models.SET('Удаленный пользователь'))
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
@@ -79,4 +84,8 @@ class Comment(models.Model):
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+class UserCategory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
