@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+from django.core.cache import cache
 
 from datetime import datetime
 
@@ -25,6 +26,7 @@ class PostList(ListView):
         context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
         context['is_not_login'] = not self.request.user.is_authenticated
         return context
+    
 
 class PostSearh(ListView):
     model = Post
@@ -41,6 +43,13 @@ class PostDetail(DetailView):
     model = Post
     template_name = 'post.html'
     context_object_name = 'post'
+
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'post-{self.kwargs["pk"]}', None)
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+        return obj
 
 class PostCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = 'add.html'
